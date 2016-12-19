@@ -1,30 +1,35 @@
 <html>
 <body>
 <?php
-function addComment($coment, $fileName){
-
-    $f=fopen($fileName, 'a');
-    $coment.= '====';
-    fwrite($f,$coment);
-    fclose($f);
+function addComment($coment, $fileName)
+{
+    $data = getComments($fileName);
+    $data[] = $coment;
+    file_put_contents($fileName, serialize($data));
 }
-function getComments($fileName, $delim = '===='){
+
+function getComments($fileName)
+{
     $data = file_get_contents($fileName);
-    $data = explode($delim,$data);
-    return $data;
+    $result = array();
+    if (!empty($data)) {
+        $result = unserialize($data);
+    }
+    return $result;
 }
 
-function render($fileName){
+function render($fileName)
+{
     $comments = getComments($fileName);
-    foreach ($comments as $comment){
+    foreach ($comments as $comment) {
         echo '<p>' . $comment . '</p>';
     }
 
 }
 
 $fileName = "comment.txt";
-if(isset($_POST['comment'])){
-addComment($_POST['comment'],$fileName);
+if (isset($_POST['comment'])) {
+    addComment($_POST['comment'], $fileName);
 }
 render($fileName);
 
