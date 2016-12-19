@@ -44,8 +44,6 @@ function getColor(){
     </select>
 <input type="submit" value="Change color"/>
 </form>
-
-
 </body>
 </html>
 
